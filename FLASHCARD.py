@@ -68,7 +68,7 @@ while True:
                         print("No flashcards found.")
                     else:
                         for card in flashcards:
-                            print(f"{card['id']}: {card['topic']}: {card['phase']} - {card['answer']}")
+                            print(f"{card['id']}: {card['topic']}: {card['phase']}, Answer : {card['answer']}")
             except FileNotFoundError:
                 print("No flashcards found.")
     elif teacher == "n":
