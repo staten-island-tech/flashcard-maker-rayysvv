@@ -41,6 +41,47 @@ def clear_flashcards(filename="flashcards.json"):
         json.dump([], file, indent=4)
     print("Flashcards cleared from file.")
 
+def student_mode():
+    streak = 0
+    amountofcorrectAnswers = 0
+    score = 0
+    try:
+        with open("flashcards.json", "r") as file:
+            flashcards = json.load(file)
+            if not flashcards:
+                print("No flashcards found.")
+            else:
+                while True:
+                    for card in flashcards:
+                        print(f"{card['id']}: {card['topic']}: {card['phase']}")
+                    flashcard_id = int(input("Enter the flashcard number you want to see (or 0 to exit): "))
+                    if flashcard_id == 0:
+                        break
+                    for card in flashcards:
+                        if card['id'] == flashcard_id:
+                            print(f"Flashcard {flashcard_id} | {card['topic']}")
+                            print(f"Phase: {card['phase']}")
+                            while True:
+                                answerAttempt = input("Enter your answer: ")
+                                if answerAttempt == card['answer']:
+                                    print("Correct!")
+                                    streak += 1
+                                    amountofcorrectAnswers += 1
+                                    score = ((streak * 0.5) + amountofcorrectAnswers) + score
+                                    print(f"You have a score of {score}")
+                                    if streak > 0:
+                                        print(f"Your streak is {streak}!")
+                                    break
+                                else:
+                                    print("Incorrect. Try again.")
+                                    print(f"You lost your streak of {streak}!")
+                                    print(f"You have a score of {score}")
+                                    streak = 0
+                                    
+                            break
+                    else:
+                        print(f"Flashcard {flashcard_id} not found.")
+
 clear_flashcards()
 
 while True:
@@ -64,7 +105,7 @@ while True:
             try:
                 with open("flashcards.json", "r") as file:
                     flashcards = json.load(file)
-                    if not flashcards:
+                    if not flashcards:  
                         print("No flashcards found.")
                     else:
                         for card in flashcards:
@@ -74,6 +115,7 @@ while True:
     elif teacher == "n":
         streak = 0
         amountofcorrectAnswers = 0
+        score = 0
         try:
             with open("flashcards.json", "r") as file:
                 flashcards = json.load(file)
@@ -96,15 +138,20 @@ while True:
                                         print("Correct!")
                                         streak += 1
                                         amountofcorrectAnswers += 1
+                                        score = ((streak * 0.5) + amountofcorrectAnswers) + score
+                                        print(f"You have a score of {score}")
                                         if streak > 0:
                                             print(f"Your streak is {streak}!")
                                         break
                                     else:
                                         print("Incorrect. Try again.")
                                         print(f"You lost your streak of {streak}!")
+                                        print(f"You have a score of {score}")
                                         streak = 0
+                                    
                                 break
                         else:
                             print(f"Flashcard {flashcard_id} not found.")
         except FileNotFoundError:
             print("No flashcards found.")
+
